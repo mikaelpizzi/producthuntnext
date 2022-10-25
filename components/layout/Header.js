@@ -3,6 +3,8 @@ import Search from "../ui/Search";
 import Navigation from "./Navigation";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
+import Button from "../ui/Button";
+import React from 'react';
 
 const HeaderContainer = styled.div`
     max-width: 1200px;
@@ -24,6 +26,9 @@ const Logo = styled.p`
 `
 
 const Header = () => {
+
+    const user = true;
+
     return (  
         <header
             css={css`
@@ -42,13 +47,40 @@ const Header = () => {
                     <Navigation />
                 </div>
 
-                <div>
-                    <p>Hi: Ei</p>
+                <div
+                    css={css`
+                        display: flex;
+                        align-items: center;
+                    `}
+                >
 
-                    <button type="button">Log out</button>
+                { user ? (
+                    <>
+                        <p
+                            css={css`
+                                margin-right: 2rem;
+                            `}
+                        >Hi: <strong>Ei</strong></p>
 
-                    <Link href="/">Log in</Link>
-                    <Link href="/">Sign up</Link>
+                        <Button
+                            bgColor={"#da552f"}
+                        >Log out</Button>
+                    </>
+
+                ) : (
+                    <>
+                        <Link href="/">
+                            <Button
+                                bgColor={"#da552f"}
+                            >Log in</Button>
+                        </Link>
+
+                        <Link href="/">
+                            <Button>Sign up</Button>
+                        </Link>
+                    </>
+                ) }
+
                 </div>
             </HeaderContainer>
         </header>
