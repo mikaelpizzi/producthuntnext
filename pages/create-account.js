@@ -12,7 +12,14 @@ export default function CreateAccount() {
         email: '',
         password: ''
     }
-    const {} = useValidation(INITIAL_STATE, validateCreateAccount, createAccount);
+    const { values,
+            errors,
+            submitform,
+            handleSubmit,
+            handleChange
+    } = useValidation(INITIAL_STATE, validateCreateAccount, createAccount);
+
+    const { name, email, password } = values;
 
     function createAccount() {
         console.log('Creating account...');
@@ -28,7 +35,10 @@ export default function CreateAccount() {
                 font-family: 'PT Sans', sans-serif;
             `}
         >Create Account</h1>
-        <Form>
+        <Form
+            onSubmit={handleSubmit}
+            noValidate
+        >
             <Field>
                 <label htmlFor='name'>Name</label>
                 <input
@@ -36,6 +46,8 @@ export default function CreateAccount() {
                     id="name"
                     placeholder="Your Name"
                     name="name"
+                    value={name}
+                    onChange={handleChange}
                 />
             </Field>
 
@@ -46,6 +58,8 @@ export default function CreateAccount() {
                     id="email"
                     placeholder="Your email"
                     name="email"
+                    value={email}
+                    onChange={handleChange}
                 />
             </Field>
 
@@ -56,6 +70,8 @@ export default function CreateAccount() {
                     id="password"
                     placeholder="Your Password"
                     name="password"
+                    value={password}
+                    onChange={handleChange}
                 />
             </Field>
 

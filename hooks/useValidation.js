@@ -16,7 +16,7 @@ const useValidation = (initialState, validate, fn) => {
 
         setSubmitForm(false);
       }
-    }, []);
+    }, [errors]);
 
     // Function that runs as the user types
     const handleChange = e => {
