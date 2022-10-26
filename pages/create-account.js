@@ -1,8 +1,23 @@
 import Layout from '../components/layout/Layout'
 import { Field, Form, InputSubmit } from '../components/ui/Form'
 import { css } from "@emotion/react"
+// Validation
+import useValidation from '../hooks/useValidation'
+import validateCreateAccount from '../validation/validateCreateAccount'
 
 export default function CreateAccount() {
+
+    const INITIAL_STATE = {
+        name: '',
+        email: '',
+        password: ''
+    }
+    const {} = useValidation(INITIAL_STATE, validateCreateAccount, createAccount);
+
+    function createAccount() {
+        console.log('Creating account...');
+    }
+
   return (
     <div>
       <Layout>
