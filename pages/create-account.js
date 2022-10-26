@@ -1,5 +1,5 @@
 import Layout from '../components/layout/Layout'
-import { Field, Form, InputSubmit } from '../components/ui/Form'
+import { Error, Field, Form, InputSubmit } from '../components/ui/Form'
 import { css } from "@emotion/react"
 // Validation
 import useValidation from '../hooks/useValidation'
@@ -14,9 +14,9 @@ export default function CreateAccount() {
     }
     const { values,
             errors,
-            submitform,
             handleSubmit,
-            handleChange
+            handleChange,
+            handleBlur
     } = useValidation(INITIAL_STATE, validateCreateAccount, createAccount);
 
     const { name, email, password } = values;
@@ -48,8 +48,12 @@ export default function CreateAccount() {
                     name="name"
                     value={name}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                 />
+                
             </Field>
+
+            { errors.name && <Error>{errors.name}</Error> }
 
             <Field>
                 <label htmlFor='email'>Email</label>
@@ -60,8 +64,11 @@ export default function CreateAccount() {
                     name="email"
                     value={email}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                 />
             </Field>
+
+            { errors.email && <Error>{errors.email}</Error> }
 
             <Field>
                 <label htmlFor='password'>Password</label>
@@ -72,8 +79,11 @@ export default function CreateAccount() {
                     name="password"
                     value={password}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                 />
             </Field>
+
+            { errors.password && <Error>{errors.password}</Error> }
 
             <InputSubmit
                 type="submit"
