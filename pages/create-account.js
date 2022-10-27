@@ -1,6 +1,7 @@
 import Layout from '../components/layout/Layout'
 import { Error, Field, Form, InputSubmit } from '../components/ui/Form'
 import { css } from "@emotion/react"
+import firebase from '../firebase'
 // Validation
 import useValidation from '../hooks/useValidation'
 import validateCreateAccount from '../validation/validateCreateAccount'
@@ -21,8 +22,12 @@ export default function CreateAccount() {
 
     const { name, email, password } = values;
 
-    function createAccount() {
-        console.log('Creating account...');
+    async function createAccount() {
+        try {
+            firebase.register(name, email, password);
+        } catch (error) {
+            console.error('There was an error when creating user', error );
+        }
     }
 
   return (
