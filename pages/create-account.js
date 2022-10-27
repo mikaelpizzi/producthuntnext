@@ -24,9 +24,9 @@ export default function CreateAccount() {
 
     async function createAccount() {
         try {
-            firebase.register(name, email, password);
+            await firebase.register(name, email, password);
         } catch (error) {
-            console.error('There was an error when creating user', error );
+            console.error('There was an error when creating user', error.message );
         }
     }
 
