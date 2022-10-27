@@ -11,13 +11,13 @@ class Firebase {
         this.auth = app.auth();
     }
 
-    // Registra un usuario
-    async register(nombre, email, password) {
+    // Register a new user
+    async register(name, email, password) {
         try {
-            const nuevoUsuario = await this.auth.createUserWithEmailAndPassword(email, password);
+            const newUser = await this.auth.createUserWithEmailAndPassword(email, password);
 
-            return await nuevoUsuario.user.updateProfile({
-                displayName : nombre
+            return await newUser.user.updateProfile({
+                displayName : name
             })
         } catch (error) {
             console.error('ERROR: There was an error when creating user', error.message );
