@@ -29,7 +29,8 @@ export default function Login() {
 
   async function login() {
     try {
-      await firebase.login(email, password);
+      const user = await firebase.login(email, password);
+      console.log(user);
       Router.push('/');
     } catch (error) {
       console.error('ERROR: There was an error logging in', error.message );
