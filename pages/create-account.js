@@ -33,7 +33,7 @@ export default function CreateAccount() {
             await firebase.register(name, email, password);
             Router.push('/');
         } catch (error) {
-            console.error('There was an error when creating user', error.message );
+            console.error('ERROR: There was an error when creating user', error.message );
             setError(error.message);
         }
     }

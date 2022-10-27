@@ -14,7 +14,6 @@ import Router from 'next/router'
         password: ''
     }
 
-
 export default function Login() {
 
   const [ error, setError ] = useState(false);
@@ -28,8 +27,14 @@ export default function Login() {
 
   const { email, password } = values;
 
-  function login() {
-    console.log('loggin in...');
+  async function login() {
+    try {
+      await firebase.login(email, password);
+      Router.push('/');
+    } catch (error) {
+      console.error('ERROR: There was an error logging in', error.message );
+      setError(error.message);
+    }
   }
 
 return (
@@ -77,7 +82,7 @@ return (
 
             { errors.password && <Error>{errors.password}</Error> }
 
-            { error && <Error><ErrorMessage message="The email address is already in use by another account" /></Error> }
+            { error && <Error>{error}</Error> }
 
             <InputSubmit
                 type="submit"
