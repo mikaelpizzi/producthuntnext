@@ -5,14 +5,20 @@ import firebase from '../firebase'
 // Validation
 import useValidation from '../hooks/useValidation'
 import validateCreateAccount from '../validation/validateCreateAccount'
-
-export default function CreateAccount() {
+import { useState } from 'react'
+import ErrorMessage from '../components/ui/ErrorMessage'
+import Router from 'next/router'
 
     const INITIAL_STATE = {
         name: '',
         email: '',
         password: ''
     }
+
+export default function CreateAccount() {
+
+    const [ error, setError ] = useState(false);
+
     const { values,
             errors,
             handleSubmit,
@@ -25,8 +31,10 @@ export default function CreateAccount() {
     async function createAccount() {
         try {
             await firebase.register(name, email, password);
+            Router.push('/');
         } catch (error) {
             console.error('There was an error when creating user', error.message );
+            setError(error.message);
         }
     }
 
@@ -89,6 +97,8 @@ export default function CreateAccount() {
             </Field>
 
             { errors.password && <Error>{errors.password}</Error> }
+
+            { error && <Error><ErrorMessage message="The email address is already in use by another account" /></Error> }
 
             <InputSubmit
                 type="submit"
