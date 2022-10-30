@@ -1,5 +1,6 @@
 import app from 'firebase/compat/app';
 import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 
 import firebaseConfig from './config';
 
@@ -9,6 +10,7 @@ class Firebase {
             app.initializeApp(firebaseConfig)
         }
         this.auth = app.auth();
+        this.db = app.firestore();
     }
 
     // Register a new user

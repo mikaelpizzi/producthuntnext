@@ -1,13 +1,13 @@
 import Layout from '../components/layout/Layout'
 import { Error, Field, Form, InputSubmit } from '../components/ui/Form'
 import { css } from "@emotion/react"
-import firebase from '../firebase'
+import firebase, { FirebaseContext } from '../firebase'
 // Validation
 import useValidation from '../hooks/useValidation'
 import validateCreateProduct from '../validation/validateCreateProduct'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import ErrorMessage from '../components/ui/ErrorMessage'
-import Router from 'next/router'
+import Router, { useRouter } from 'next/router'
 
     const INITIAL_STATE = {
         name: '',
@@ -26,11 +26,35 @@ export default function NewProduct() {
           handleSubmit,
           handleChange,
           handleBlur
-  } = useValidation(INITIAL_STATE, validateCreateProduct, createAccount);
+  } = useValidation(INITIAL_STATE, validateCreateProduct, createProduct);
 
   const { name, company, url, description } = values;
 
-  async function createAccount() {
+  // Routing hook for redirect
+  const router = useRouter();
+
+  // Context with Firebase CRUD operations
+  const { user, firebase } = useContext(FirebaseContext);
+
+  async function createProduct() {
+    // If user is not authenticated, take him to login
+    if (!user) {
+        return router.push('/login');
+    }
+
+    // Create new product object
+    const product = {
+        name,
+        company,
+        url,
+        description,
+        votes: 0,
+        comments: [],
+        created: Date.now()
+    }
+
+    // Insert new product in database
+    firebase.db.collection('products').add(product);
      
   }
 
