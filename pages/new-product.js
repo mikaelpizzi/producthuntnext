@@ -1,63 +1,99 @@
 import Layout from '../components/layout/Layout'
 import { Error, Field, Form, InputSubmit } from '../components/ui/Form'
-import { css } from "@emotion/react"
+import { css } from '@emotion/react'
 import firebase, { FirebaseContext } from '../firebase'
+import Router, { useRouter } from 'next/router'
+import FileUploader from 'react-firebase-file-uploader';
 // Validation
 import useValidation from '../hooks/useValidation'
 import validateCreateProduct from '../validation/validateCreateProduct'
 import { useContext, useState } from 'react'
 import ErrorMessage from '../components/ui/ErrorMessage'
-import Router, { useRouter } from 'next/router'
 
     const INITIAL_STATE = {
         name: '',
         company: '',
-        // image: '',
+        image: '',
         url: '',
         description: ''
     }
 
 export default function NewProduct() {
 
-  const [ error, setError ] = useState(false);
+    // Images state
+    const [ imagename, setImageName ] = useState('');
+    const [ uploading, setUploading ] = useState(false);
+    const [ progress, setProgress ] = useState(0);
+    const [ imageurl, setImageUrl ] = useState('');
 
-  const { values,
-          errors,
-          handleSubmit,
-          handleChange,
-          handleBlur
-  } = useValidation(INITIAL_STATE, validateCreateProduct, createProduct);
+    const [ error, setError ] = useState(false);
 
-  const { name, company, url, description } = values;
+    const { values,
+            errors,
+            handleSubmit,
+            handleChange,
+            handleBlur
+    } = useValidation(INITIAL_STATE, validateCreateProduct, createProduct);
 
-  // Routing hook for redirect
-  const router = useRouter();
+    const { name, company, url, description } = values;
 
-  // Context with Firebase CRUD operations
-  const { user, firebase } = useContext(FirebaseContext);
+    // Routing hook for redirect
+    const router = useRouter();
 
-  async function createProduct() {
-    // If user is not authenticated, take him to login
-    if (!user) {
-        return router.push('/login');
+    // Context with Firebase CRUD operations
+    const { user, firebase } = useContext(FirebaseContext);
+
+    async function createProduct() {
+        // If user is not authenticated, take him to login
+        if (!user) {
+            return router.push('/login');
+        }
+
+        // Create new product object
+        const product = {
+            name,
+            company,
+            url,
+            imageurl,
+            description,
+            votes: 0,
+            comments: [],
+            created: Date.now()
+        }
+
+        // Insert new product in database
+        firebase.db.collection('products').add(product);
+
+        return router.push('/');
     }
 
-    // Create new product object
-    const product = {
-        name,
-        company,
-        url,
-        description,
-        votes: 0,
-        comments: [],
-        created: Date.now()
+    // Handle image submit functions
+    const handleUploadStart = () => {
+        setProgress(0);
+        setUploading(true);
     }
-
-    // Insert new product in database
-    firebase.db.collection('products').add(product);
-     
-  }
-
+  
+    const handleProgress = progress => setProgress({ progress });
+  
+    const handleUploadError = error => {
+        setUploading(error);
+        console.error('ERROR:', error);
+    };
+  
+    const handleUploadSuccess = name => {
+        setProgress(100);
+        setUploading(false);
+        setImageName(name);
+        firebase
+            .storage
+            .ref("products")
+            .child(name)
+            .getDownloadURL()
+            .then(url => {
+              console.log(url);
+              setImageUrl(url);
+            } );
+    };
   return (
     <div>
       <Layout>
@@ -107,20 +143,21 @@ export default function NewProduct() {
 
             { errors.company && <Error>{errors.company}</Error> }
 
-            {/* <Field>
+            <Field>
                 <label htmlFor='image'>Image</label>
-                <input
-                    type="file"
+                <FileUploader
+                    accept="image/*"
                     id="image"
                     name="image"
-                    value={image}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
+                    randomizeFilename
+                    storageRef={firebase.storage.ref('products')}
+                    onUploadStart={handleUploadStart}
+                    onUploadError={handleUploadError}
+                    onUploadSuccess={handleUploadSuccess}
+                    onProgress={handleProgress}
                 />
                 
             </Field>
-
-            { errors.image && <Error>{errors.image}</Error> } */}
 
             <Field>
                 <label htmlFor='url'>URL</label>
