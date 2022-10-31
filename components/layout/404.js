@@ -7,7 +7,7 @@ const Error404 = () => {
                 margin-top: 5rem;
                 text-align: center;
             `}
-        >This product does not exist</h1>
+        >Umm, there's nothing here</h1>
     );
 }
  
