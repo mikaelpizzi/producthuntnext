@@ -58,7 +58,11 @@ export default function NewProduct() {
             description,
             votes: 0,
             comments: [],
-            created: Date.now()
+            created: Date.now(),
+            creator: {
+                id: user.uid,
+                name: user.displayName
+            }
         }
 
         // Insert new product in database
