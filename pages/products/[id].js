@@ -6,6 +6,8 @@ import Error404 from "../../components/layout/404";
 import Layout from "../../components/layout/Layout";
 import { css } from "@emotion/react";
 import styled from '@emotion/styled';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import { Field, InputSubmit } from '../../components/ui/Form';
 
 const ProductContainer = styled.div`
     @media (min-width: 768px) {
@@ -64,7 +66,37 @@ const Product = () => {
 
                     <ProductContainer>
                         <div>
-                            1
+                            <p>Posted {formatDistanceToNow(new Date(created))} ago</p>
+
+                            <img src={imageurl} />
+                            <p>{description}</p>
+
+                            <h2>Add a comment</h2>
+                            <form>
+                                <Field>
+                                    <input 
+                                        type="text"
+                                        name="message"
+                                    />
+                                </Field>
+
+                                <InputSubmit
+                                    type="submit"
+                                    value="Add comment"
+                                />
+                            </form>
+
+                            <h2
+                                css={css`
+                                    margin: 2rem 0;
+                                `}
+                            >Comments</h2>
+                            { comments.map(comment => (
+                                <li>
+                                    <p>{comment.name}</p>
+                                    <p>Written by: {comment.userName}</p>
+                                </li>
+                            ))}
                         </div>
 
                         <aside>
