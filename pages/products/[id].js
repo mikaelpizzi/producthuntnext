@@ -8,6 +8,7 @@ import { css } from "@emotion/react";
 import styled from '@emotion/styled';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import { Field, InputSubmit } from '../../components/ui/Form';
+import Button from '../../components/ui/Button';
 
 const ProductContainer = styled.div`
     @media (min-width: 768px) {
@@ -100,7 +101,25 @@ const Product = () => {
                         </div>
 
                         <aside>
-                            2
+                            <Button
+                                target="_blank"
+                                bgColor="#da552f"
+                                href={url}
+                            >Visit URL</Button>
+
+                            <div
+                                css={css`
+                                    margin-top: 5rem;
+                                `}
+                            >
+                                <p
+                                    css={css`
+                                        text-align: center;
+                                    `}
+                                >{votes} Upvote</p>
+                                
+                                <Button>Vote</Button>
+                            </div>
                         </aside>
                     </ProductContainer>
                 </div>
