@@ -1,0 +1,10 @@
+{
+  "hosting": {
+    "public": "out/producthuntnext",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
