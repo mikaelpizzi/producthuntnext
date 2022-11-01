@@ -89,7 +89,8 @@ const Product = () => {
         // Update state
         setProduct({
             ...product,
-            votes: newTotal
+            votes: newTotal,
+            hasVoted: newHasVoted 
         })
 
         setConsultDB(true); // When voting, then consult db
