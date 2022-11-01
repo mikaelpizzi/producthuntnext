@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import { useState } from "react";
+import Router from "next/router";
 
 const InputText = styled.input`
     border: 1px solid var(--gray3);
@@ -37,7 +38,13 @@ const Search = () => {
         if (search.trim() === '') return;
 
         // Redirect user
-        
+        Router.push({
+            pathname: '/search',
+            query: {
+                q: search
+            }
+        })
+
 
     }
 
