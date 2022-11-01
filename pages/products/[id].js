@@ -51,6 +51,24 @@ const Product = () => {
 
     const { comments, created, description, company, name, url, imageurl, votes, creator } = product;
 
+    // Administrate and validate upvotes
+    const upvoteProduct = () => {
+        if (!user) {
+            return router.push('/login'); // Security layer
+        }
+
+        // Get and add new vote
+        const newTotal = votes + 1;
+
+        // Update db
+        firebase.db.collection('products').doc(id).update({ votes: newTotal });
+
+        // Update state
+        setProduct({
+            ...product,
+            votes: newTotal
+        })
+    }
 
     return (  
         <Layout>
@@ -123,7 +141,10 @@ const Product = () => {
                                     `}
                                 >{votes} Upvote</p>
                                 
-                                { user && <Button>Vote</Button> }
+                                { user && 
+                                <Button
+                                    onClick={upvoteProduct}
+                                >Vote</Button> }
                             </div>
                         </aside>
                     </ProductContainer>
