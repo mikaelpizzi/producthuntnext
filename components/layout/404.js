@@ -7,7 +7,7 @@ const Error404 = () => {
                 margin-top: 5rem;
                 text-align: center;
             `}
-        >Umm, there's nothing here</h1>
+        >Umm, there&apos;s nothing here</h1>
     );
 }
  
