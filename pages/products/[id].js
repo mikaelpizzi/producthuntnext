@@ -22,8 +22,9 @@ const Product = () => {
     // Component state
     const [ product, setProduct ] = useState({});
     const [ error, setError ] = useState(false);
+    const [ comment, saveComment ] = useState({});
 
-    // Routing for getting actual id
+    // Routing for getting actual product id
     const router = useRouter();
     const { query: {id}} = router;
 
@@ -79,6 +80,40 @@ const Product = () => {
         })
     }
 
+    // Functions to create comments
+    const onChangeComment = e => {
+        saveComment({
+            ...comment,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const addComment = e => {
+        e.preventDefault();
+
+        if (!user) {
+            return router.push('/login'); // Security layer
+        }
+
+        // Extra info to comment
+        comment.userId = user.uid;
+        comment.userName= user.displayName;
+
+        // Get copy of comments and add it to the array
+        const newComments = [...comments, comment];
+
+        // Update db
+        firebase.db.collection('products').doc(id).update({
+            comments: newComments
+        });
+
+        // Update state
+        setProduct({
+            ...product,
+            comments: newComments
+        })
+    }
+
     return (  
         <Layout>
             <>
@@ -103,11 +138,14 @@ const Product = () => {
                             { user && (
                                 <>
                                     <h2>Add a comment</h2>
-                                    <form>
+                                    <form
+                                        onSubmit={addComment}
+                                    >
                                         <Field>
                                             <input 
                                                 type="text"
                                                 name="message"
+                                                onChange={onChangeComment}
                                             />
                                         </Field>
 
@@ -124,12 +162,31 @@ const Product = () => {
                                     margin: 2rem 0;
                                 `}
                             >Comments</h2>
-                            { comments.map(comment => (
-                                <li>
-                                    <p>{comment.name}</p>
-                                    <p>Written by: {comment.userName}</p>
-                                </li>
-                            ))}
+
+                            { comments.length === 0 ? "No comments yet" : (
+                                <ul>
+                                { comments.map((comment, i) => (
+                                    <li
+                                        key={`${comment.userId}-${i}`}
+                                        css={css`
+                                            border: 1px solid #e1e1e1;
+                                            padding: 2rem;
+                                        `}
+                                    >
+                                        <p>{comment.message}</p>
+                                        <p>
+                                            Written by: 
+                                            <span
+                                                css={css`
+                                                    font-weight: bold;
+                                                `}
+                                            >{' '}{comment.userName}</span>
+                                        </p>
+                                    </li>
+                                ))}
+                                </ul>
+                            )}
+                            
                         </div>
 
                         <aside>
