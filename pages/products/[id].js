@@ -45,11 +45,11 @@ const Product = () => {
             }
             getProduct();
         }
-    }, [id])
+    }, [id, product])
 
     if (Object.keys(product).length === 0) return 'Loading...';
 
-    const { comments, created, description, company, name, url, imageurl, votes, creator } = product;
+    const { comments, created, description, company, name, url, imageurl, votes, creator, hasVoted } = product;
 
     // Administrate and validate upvotes
     const upvoteProduct = () => {
@@ -60,9 +60,18 @@ const Product = () => {
         // Get and add new vote
         const newTotal = votes + 1;
 
-        // Update db
-        firebase.db.collection('products').doc(id).update({ votes: newTotal });
+        // Verify is actual user has voted in this product
+        if (hasVoted.includes(user.uid)) return;
 
+        // Save the id of the user who have voted
+        const newHasVoted = [...hasVoted, user.uid];
+
+        // Update db
+        firebase.db.collection('products').doc(id).update({ 
+            votes: newTotal, 
+            hasVoted: newHasVoted 
+        });
+        
         // Update state
         setProduct({
             ...product,

@@ -1,3 +1,4 @@
+import React from 'react'
 import Layout from '../components/layout/Layout'
 import { Error, Field, Form, InputSubmit } from '../components/ui/Form'
 import { css } from '@emotion/react'
@@ -63,7 +64,8 @@ export default function NewProduct() {
             creator: {
                 id: user.uid,
                 name: user.displayName
-            }
+            },
+            hasVoted: []
         }
 
         // Insert new product in database
@@ -124,7 +126,7 @@ export default function NewProduct() {
                         <input
                             type="text"
                             id="name"
-                            placeholder="Your Name"
+                            placeholder="Product Name"
                             name="name"
                             value={name}
                             onChange={handleChange}
