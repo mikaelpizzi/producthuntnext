@@ -140,6 +140,33 @@ const Product = () => {
         setConsultDB(true); // When commenting, then consult db
     }
 
+    // Function that checks if product creator is the same that the actual authenticated user
+    const canDelete = () => {
+        if (!user) return false;
+
+        if (creator.id === user.uid) {
+            return true;
+        }
+    }
+
+    // Delete a product from database
+    const deleteProduct = async () => {
+        if (!user) {
+            return router.push('/login'); // Security layer
+        }
+
+        if (creator.id !== user.uid) {
+            return router.push('/');
+        }
+
+        try {
+            await firebase.db.collection('products').doc(id).delete();
+            router.push('/');
+        } catch (error) {
+            console.log('ERROR: ', error);
+        }
+    }
+
     return (  
         <Layout>
             <>
@@ -241,6 +268,12 @@ const Product = () => {
                                     </div>
                                 </aside>
                             </ProductContainer>
+
+                            { canDelete() && 
+                                <Button
+                                    onClick={deleteProduct}
+                                >Delete Product</Button>
+                            }
                         </div>
                     </>
                 ) }
