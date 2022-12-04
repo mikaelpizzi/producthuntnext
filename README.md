@@ -9,5 +9,4 @@
 * NextJS
 * React
 * Firebase
-* React Hooks
 * Bootstrap
