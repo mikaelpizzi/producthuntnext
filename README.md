@@ -1,4 +1,4 @@
-# Product Hunt clone using Next.js
+# Product Hunt clone using NextJS
 
 ## [LIVE HERE](https://product-hunt-3f790.web.app/)
 
